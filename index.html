@@ -532,35 +532,15 @@
             var io = new IntersectionObserver(function (a) {a.forEach(function (x) {if (x.isIntersecting) x.target.classList.add("in")})}, {threshold: .15});
             document.querySelectorAll(".rise").forEach(function (el) {io.observe(el)});
 
-            /* Music: soft tanpura drone + Mohanam phrase, synthesised in the browser */
-            var ctx = null, master = null, on = false, timer = null, tt = null, k = 0;
-            var N = [261.63, 293.66, 329.63, 392, 440, 523.25];
-            var ph = [[0, 1.4], [2, 1.2], [3, 1.6], [4, 1.4], [3, .8], [2, 1], [1, .8], [0, 2.4], [2, 1], [4, 1], [5, 2.2], [4, 1], [3, 1], [2, 1.2], [0, 2.6]];
-            function note(f, t, d, v) {
-                var o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain(), lf = ctx.createOscillator(), lg = ctx.createGain();
-                o.type = "sine"; o2.type = "sine"; o.frequency.value = f; o2.frequency.value = f * 2; g2.gain.value = .18;
-                lf.frequency.value = 5.2; lg.gain.value = f * .006; lf.connect(lg); lg.connect(o.frequency); lg.connect(o2.frequency);
-                g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .18); g.gain.setValueAtTime(v, t + d * .6); g.gain.linearRampToValueAtTime(0, t + d);
-                o.connect(g); o2.connect(g2); g2.connect(g); g.connect(master); o.start(t); o2.start(t); lf.start(t); o.stop(t + d + .1); o2.stop(t + d + .1); lf.stop(t + d + .1);
-            }
-            function pl(f, t, v) {
-                var o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
-                o.type = "sawtooth"; o.frequency.value = f; lp.type = "lowpass"; lp.frequency.value = 650;
-                g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .02); g.gain.exponentialRampToValueAtTime(.001, t + 5);
-                o.connect(lp); lp.connect(g); g.connect(master); o.start(t); o.stop(t + 5.1);
-            }
-            function bell(f, t) {[1, 2.4, 3.9].forEach(function (m, i) {var o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f * m; g.gain.setValueAtTime(.1 / (i + 1), t); g.gain.exponentialRampToValueAtTime(.001, t + 3.5); o.connect(g); g.connect(master); o.start(t); o.stop(t + 3.6);});}
-            function step() {if (!on) return; var p = ph[k % ph.length]; k++; note(N[p[0]] * 2, ctx.currentTime, p[1] * 1.3, .1); timer = setTimeout(step, p[1] * 700);}
-            function tp() {if (!on) return; var t = ctx.currentTime;[[196, 0], [261.63, .9], [261.63, 1.8], [130.81, 2.7]].forEach(function (x) {pl(x[0], t + x[1], .045)}); tt = setTimeout(tp, 3600);}
-            function start() {
-                try {
-                    if (!ctx) {ctx = new (window.AudioContext || window.webkitAudioContext)(); master = ctx.createGain(); master.gain.value = .8; master.connect(ctx.destination);}
-                    ctx.resume(); on = true; clearTimeout(timer); clearTimeout(tt); bell(880, ctx.currentTime); tp(); setTimeout(step, 1500);
-                } catch (e) { }
-            }
-            function stop() {on = false; clearTimeout(timer); clearTimeout(tt);}
-            var mu = document.getElementById("mu");
-            mu.onclick = function () {if (on) {stop(); mu.style.opacity = .5} else {start(); mu.style.opacity = 1} };
+            /* Music: mp3 file, plays on repeat */
+            var audio=new Audio("music.mp3");
+            audio.loop=true;
+            audio.volume=0.6;
+            var on=false;
+            function start(){try{audio.play().catch(function(){});on=true;}catch(e){}}
+            function stop(){try{audio.pause();}catch(e){}on=false;}
+            var mu=document.getElementById("mu");
+            mu.onclick=function(){if(on){stop();mu.style.opacity=.5}else{start();mu.style.opacity=1}};
 
             document.getElementById("seal").onclick = function () {
                 this.classList.add("open"); start();

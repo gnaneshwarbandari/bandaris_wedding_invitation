@@ -399,6 +399,31 @@
         .cd span {
             font-size: .62rem
         }
+
+        .withlove {
+            font-family: Montserrat, "Segoe UI", sans-serif;
+            font-size: .7rem;
+            letter-spacing: .4em;
+            color: var(--gold);
+            margin: 18px 0 4px
+        }
+
+        .names.family {
+            font-size: clamp(1.7rem, 7.5vw, 2.3rem);
+            line-height: 1.25;
+            margin: 0 0 6px;
+            padding-top: 10px;
+            position: relative
+        }
+
+        .names.family::before {
+            content: "";
+            display: block;
+            width: 70px;
+            height: 1px;
+            background: var(--gold2);
+            margin: 0 auto 12px
+        }
     </style>
 </head>
 
@@ -446,7 +471,8 @@
             <svg class="lotus" viewBox="0 0 100 50">
                 <use href="#lotus" />
             </svg>
-            <p class="sm">The <b>Bandari's Family</b> joyfully invites you<br>to the wedding of their only daughter<br>of
+            <p class="sm">The <b>Bandari's Family</b> joyfully invites you<br>to the wedding of their only
+                daughter<br>of
                 Smt. Hemalatha &amp;Sri Srinivas </p>
             <h1 class="names">Nikhila</h1>
             <div class="weds">WEDS</div>
@@ -508,7 +534,8 @@
             </svg>
             <p class="sm" style="font-size:1.3rem;font-style:italic">Your presence and blessings will make our
                 celebration truly special.</p>
-            <h1 class="names">Bandari's<br>Family</h1>
+            <div class="withlove">WITH LOVE</div>
+            <h1 class="names family">Bandari’s Family</h1>
         </section>
     </main>
 
@@ -532,14 +559,14 @@
             document.querySelectorAll(".rise").forEach(function (el) {io.observe(el)});
 
             /* Music: mp3 file, plays on repeat */
-            var audio=new Audio("music.mp3");
-            audio.loop=true;
-            audio.volume=0.6;
-            var on=false;
-            function start(){try{audio.play().catch(function(){});on=true;}catch(e){}}
-            function stop(){try{audio.pause();}catch(e){}on=false;}
-            var mu=document.getElementById("mu");
-            mu.onclick=function(){if(on){stop();mu.style.opacity=.5}else{start();mu.style.opacity=1}};
+            var audio = new Audio("music.mp3");
+            audio.loop = true;
+            audio.volume = 0.6;
+            var on = false;
+            function start() {try {audio.play().catch(function () { }); on = true;} catch (e) { } }
+            function stop() {try {audio.pause();} catch (e) { } on = false;}
+            var mu = document.getElementById("mu");
+            mu.onclick = function () {if (on) {stop(); mu.style.opacity = .5} else {start(); mu.style.opacity = 1} };
 
             document.getElementById("seal").onclick = function () {
                 this.classList.add("open"); start();
